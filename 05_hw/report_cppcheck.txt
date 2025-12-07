@@ -1,0 +1,18 @@
+Checking 05_hw/main.c ...
+Defines:
+Undefines:
+Includes:
+Platform:native
+1/3 files checked 8% done
+Checking 05_hw/stack.c ...
+Defines:
+Undefines:
+Includes:
+Platform:native
+2/3 files checked 29% done
+Checking 05_hw/tests.c ...
+Defines:
+Undefines:
+Includes:
+Platform:native
+3/3 files checked 100% done

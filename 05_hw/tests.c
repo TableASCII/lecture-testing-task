@@ -67,11 +67,6 @@ void TopIsCorrectAfterPopFromNoneElementStack(void){
 
 }
 
-
-
-
-
-
 // searchByValue
 void SearchFindsExistingValue(void){
     Stack stack;
@@ -145,7 +140,7 @@ void GetTopReturnsNullForEmptyStack(void){
     Stack stack;
     initStack(&stack);
     
-    Node* top = getTop(&stack);
+    const Node* top = getTop(&stack);
     CU_ASSERT_PTR_NULL(top);
 }
 
@@ -155,7 +150,7 @@ void GetTopReturnsCorrectElement(void){
 
     push(&stack, 1);
     
-    Node* top = getTop(&stack);
+    const Node* top = getTop(&stack);
     CU_ASSERT_PTR_NOT_NULL(top);
     CU_ASSERT_EQUAL(top->data, 1);
 }
