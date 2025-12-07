@@ -5,6 +5,7 @@
 
 Node* createNode(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode ==NULL){return NULL;}
     newNode->data = data;
     newNode->next = NULL;
     return newNode;
@@ -21,17 +22,21 @@ void destroyStack(Stack* stack) {
         current = current->next;
 	    free(tmp);
     }
+    stack->top=NULL;
 }
 
 void push(Stack* stack, int data) {
     Node* newNode = createNode(data);
+    if(newNode==NULL){return;}
     newNode->next = stack->top;
     stack->top = newNode;
 }
 
 void pop(Stack* stack) {
+    if(isEmpty(stack)){return;}
     Node* temp = stack->top;
     stack->top = stack->top->next;
+    free(temp);
 }
 
 Node* searchByValue(Stack* stack, int value) {
@@ -40,6 +45,7 @@ Node* searchByValue(Stack* stack, int value) {
         if (current->data == value) {
             return current;
         }
+        current = current->next;
     }
     return NULL;
 }
@@ -72,7 +78,5 @@ void traverseStack(Stack* stack) {
 }
 
 bool isEmpty(Stack* stack) {
-    free(stack->top);
     return stack->top == NULL;
 }
-
