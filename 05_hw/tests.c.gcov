@@ -1,0 +1,252 @@
+        -:    0:Source:tests.c
+        -:    0:Graph:./tests_coverage-tests.gcno
+        -:    0:Data:./tests_coverage-tests.gcda
+        -:    0:Runs:1
+        -:    0:Source is newer than graph
+        -:    1:#include <CUnit/CUnit.h>
+        -:    2:#include <CUnit/Basic.h>
+        -:    3:#include "stack.h"
+        -:    4:
+        -:    5:
+        1:    6:void StackIsEmptyAfterInitialization(void){
+        -:    7:    Stack stack;
+        1:    8:    initStack(&stack);
+        1:    9:    CU_ASSERT_EQUAL(stack.top, NULL);
+        1:   10:}
+        -:   11://push
+        1:   12:void TopValueIsCorrectAfterPush(void){
+        -:   13:    Stack stack;
+        1:   14:    initStack(&stack);
+        -:   15:
+        1:   16:    push(&stack, 1337);
+        1:   17:    CU_ASSERT_EQUAL(stack.top->data, 1337);
+        -:   18:
+        1:   19:    push(&stack, 0);
+        1:   20:    CU_ASSERT_EQUAL(stack.top->data, 0);
+        -:   21:
+        1:   22:    push(&stack, -1);
+        1:   23:    CU_ASSERT_EQUAL(stack.top->data, -1);
+        1:   24:}
+        -:   25:
+        1:   26:void TopValueIsCorrectAfterSeveralPush(void){
+        -:   27:    Stack stack;
+        1:   28:    initStack(&stack);
+        -:   29:
+        1:   30:    push(&stack, 0);
+        1:   31:    push(&stack, 1);
+        1:   32:    push(&stack, -2);
+        -:   33:    
+        1:   34:    CU_ASSERT_EQUAL(stack.top->data, -2);
+        1:   35:}
+        -:   36://pop
+        1:   37:void StackIsNullAfterPopSingleElement(void){
+        -:   38:    Stack stack;
+        1:   39:    initStack(&stack);
+        -:   40:
+        1:   41:    push(&stack, 1);
+        1:   42:    pop(&stack);
+        1:   43:    CU_ASSERT_EQUAL(stack.top, NULL);
+        -:   44:
+        1:   45:}
+        -:   46:
+        1:   47:void TopIsCorrectAfterPop(void){
+        -:   48:    Stack stack;
+        1:   49:    initStack(&stack);
+        -:   50:
+        1:   51:    push(&stack, 1);
+        1:   52:    push(&stack, 2);
+        -:   53:
+        1:   54:    pop(&stack);
+        -:   55:
+        1:   56:    CU_ASSERT_EQUAL(stack.top->data, 1);
+        1:   57:    CU_ASSERT_PTR_NULL(stack.top->next);
+        -:   58:
+        1:   59:}
+        -:   60:
+        1:   61:void TopIsCorrectAfterPopFromNoneElementStack(void){
+        -:   62:    Stack stack;
+        1:   63:    initStack(&stack);
+        -:   64:
+        1:   65:    pop(&stack);
+        1:   66:    CU_ASSERT_PTR_NULL(stack.top);
+        -:   67:
+        1:   68:}
+        -:   69:
+        -:   70:
+        -:   71:
+        -:   72:
+        -:   73:
+        -:   74:
+        -:   75:// searchByValue
+        1:   76:void SearchFindsExistingValue(void){
+        -:   77:    Stack stack;
+        1:   78:    initStack(&stack);
+        -:   79:
+        1:   80:    push(&stack, 1);
+        1:   81:    push(&stack, 2);
+        1:   82:    push(&stack, 3);
+        -:   83:    
+        1:   84:    Node* found = searchByValue(&stack, 2);
+        1:   85:    CU_ASSERT_PTR_NOT_NULL(found);
+        1:   86:    CU_ASSERT_EQUAL(found->data, 2);
+        1:   87:}
+        -:   88:
+        1:   89:void SearchReturnsNullForMissingValue(void){
+        -:   90:    Stack stack;
+        1:   91:    initStack(&stack);
+        -:   92:
+        1:   93:    push(&stack, 1);
+        1:   94:    push(&stack, 2);
+        -:   95:    
+        1:   96:    Node* notFound = searchByValue(&stack, 999);
+        1:   97:    CU_ASSERT_PTR_NULL(notFound);
+        1:   98:}
+        -:   99:
+        1:  100:void SearchReturnsNullInEmptyStack(void){
+        -:  101:    Stack stack;
+        1:  102:    initStack(&stack);
+        -:  103:    
+        1:  104:    Node* result = searchByValue(&stack, 1);
+        1:  105:    CU_ASSERT_PTR_NULL(result);
+        1:  106:}
+        -:  107:
+        -:  108:// searchByIndex
+        1:  109:void SearchByIndexFindsTopElement(void){
+        -:  110:    Stack stack;
+        1:  111:    initStack(&stack);
+        -:  112:
+        1:  113:    push(&stack, 1);
+        1:  114:    push(&stack, 2);
+        -:  115:    
+        1:  116:    Node* top = searchByIndex(&stack, 0);
+        1:  117:    CU_ASSERT_PTR_NOT_NULL(top);
+        1:  118:    CU_ASSERT_EQUAL(top->data, 2);
+        1:  119:}
+        -:  120:
+        1:  121:void SearchByIndexFindsSecondElement(void){
+        -:  122:    Stack stack;
+        1:  123:    initStack(&stack);
+        -:  124:
+        1:  125:    push(&stack, 1);
+        1:  126:    push(&stack, 2);
+        -:  127:    
+        1:  128:    Node* second = searchByIndex(&stack, 1);
+        1:  129:    CU_ASSERT_PTR_NOT_NULL(second);
+        1:  130:    CU_ASSERT_EQUAL(second->data, 1);
+        1:  131:}
+        -:  132:
+        1:  133:void SearchByIndexReturnsNullForInvalidIndex(void){
+        -:  134:    Stack stack;
+        1:  135:    initStack(&stack);
+        -:  136:
+        1:  137:    push(&stack, 1);
+        -:  138:    
+        1:  139:    Node* result = searchByIndex(&stack, 5);
+        1:  140:    CU_ASSERT_PTR_NULL(result);
+        1:  141:}
+        -:  142:
+        -:  143:// getTop
+        1:  144:void GetTopReturnsNullForEmptyStack(void){
+        -:  145:    Stack stack;
+        1:  146:    initStack(&stack);
+        -:  147:    
+        1:  148:    Node* top = getTop(&stack);
+        1:  149:    CU_ASSERT_PTR_NULL(top);
+        1:  150:}
+        -:  151:
+        1:  152:void GetTopReturnsCorrectElement(void){
+        -:  153:    Stack stack;
+        1:  154:    initStack(&stack);
+        -:  155:
+        1:  156:    push(&stack, 1);
+        -:  157:    
+        1:  158:    Node* top = getTop(&stack);
+        1:  159:    CU_ASSERT_PTR_NOT_NULL(top);
+        1:  160:    CU_ASSERT_EQUAL(top->data, 1);
+        1:  161:}
+        -:  162:
+        -:  163:// traverseStack 
+        1:  164:void TraverseDoesNotCrashOnEmptyStack(void){
+        -:  165:    Stack stack;
+        1:  166:    initStack(&stack);
+        -:  167:    
+        1:  168:    traverseStack(&stack); 
+        1:  169:}
+        -:  170:
+        1:  171:void TraverseDoesNotCrashOnNonEmptyStack(void){
+        -:  172:    Stack stack;
+        1:  173:    initStack(&stack);
+        -:  174:
+        1:  175:    push(&stack, 1);
+        1:  176:    push(&stack, 2);
+        -:  177:    
+        1:  178:    traverseStack(&stack); 
+        1:  179:}
+        -:  180:
+        -:  181:// isEmpty
+        1:  182:void IsEmptyReturnsTrueForEmptyStack(void){
+        -:  183:    Stack stack;
+        1:  184:    initStack(&stack);
+        -:  185:    
+        1:  186:    bool empty = isEmpty(&stack);
+        1:  187:    CU_ASSERT_TRUE(empty);
+        1:  188:}
+        -:  189:
+        1:  190:void IsEmptyReturnsFalseForNonEmptyStack(void){
+        -:  191:    Stack stack;
+        1:  192:    initStack(&stack);
+        -:  193:
+        1:  194:    push(&stack, 1);
+        -:  195:    
+        1:  196:    bool empty = isEmpty(&stack);
+        1:  197:    CU_ASSERT_FALSE(empty);
+        1:  198:}
+        -:  199:
+        -:  200:// destroyStack
+        1:  201:void DestroyStackMakesTopNull(void){
+        -:  202:    Stack stack;
+        1:  203:    initStack(&stack);
+        -:  204:
+        1:  205:    push(&stack, 1);
+        1:  206:    push(&stack, 2);
+        -:  207:    
+        1:  208:    destroyStack(&stack);
+        1:  209:    CU_ASSERT_EQUAL(stack.top, NULL);
+        1:  210:}
+        -:  211:
+        -:  212:
+        1:  213:int main(){
+        1:  214:    CU_initialize_registry();
+        1:  215:    CU_pSuite suite = CU_add_suite("Stack tests", 0, 0);
+        -:  216:
+        1:  217:    CU_add_test(suite, "initStack", StackIsEmptyAfterInitialization);
+        1:  218:    CU_add_test(suite, "Push single element", TopValueIsCorrectAfterPush);
+        1:  219:    CU_add_test(suite, "Push several elements", TopValueIsCorrectAfterSeveralPush);
+        -:  220:
+        1:  221:    CU_add_test(suite, "Pop from one-element stack", StackIsNullAfterPopSingleElement);
+        1:  222:    CU_add_test(suite, "Pop from multiple-element stack", TopIsCorrectAfterPop);
+        1:  223:    CU_add_test(suite, "Pop from none-element stack", TopIsCorrectAfterPopFromNoneElementStack);
+        -:  224:
+        1:  225:    CU_add_test(suite, "Search finds existing value", SearchFindsExistingValue);
+        1:  226:    CU_add_test(suite, "Search returns null for missing value", SearchReturnsNullForMissingValue);
+        1:  227:    CU_add_test(suite, "Search returns null in empty stack", SearchReturnsNullInEmptyStack);
+        -:  228:    
+        1:  229:    CU_add_test(suite, "Search by index finds first", SearchByIndexFindsTopElement);
+        1:  230:    CU_add_test(suite, "Search by index finds second", SearchByIndexFindsSecondElement);
+        1:  231:    CU_add_test(suite, "Search by index null for invalid", SearchByIndexReturnsNullForInvalidIndex);
+        -:  232:    
+        1:  233:    CU_add_test(suite, "GetTop null for empty", GetTopReturnsNullForEmptyStack);
+        1:  234:    CU_add_test(suite, "GetTop correct element", GetTopReturnsCorrectElement);
+        -:  235:    
+        1:  236:    CU_add_test(suite, "Traverse empty stack", TraverseDoesNotCrashOnEmptyStack);
+        1:  237:    CU_add_test(suite, "Traverse non-empty stack", TraverseDoesNotCrashOnNonEmptyStack);
+        -:  238:    
+        1:  239:    CU_add_test(suite, "IsEmpty true for empty", IsEmptyReturnsTrueForEmptyStack);
+        1:  240:    CU_add_test(suite, "IsEmpty false for non-empty", IsEmptyReturnsFalseForNonEmptyStack);
+        -:  241:    
+        1:  242:    CU_add_test(suite, "DestroyStack makes top null", DestroyStackMakesTopNull);
+        -:  243:
+        1:  244:    CU_basic_set_mode(CU_BRM_VERBOSE);
+        1:  245:    CU_basic_run_tests();
+        1:  246:    CU_cleanup_registry();
+        -:  247:}

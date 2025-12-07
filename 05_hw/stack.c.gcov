@@ -1,0 +1,84 @@
+        -:    0:Source:stack.c
+        -:    0:Graph:./tests_coverage-stack.gcno
+        -:    0:Data:./tests_coverage-stack.gcda
+        -:    0:Runs:1
+        -:    0:Source is newer than graph
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:
+        -:    4:#include "stack.h"
+        -:    5:
+       25:    6:Node* createNode(int data) {
+       25:    7:    Node* newNode = (Node*)malloc(sizeof(Node));
+       25:    8:    newNode->data = data;
+       25:    9:    newNode->next = NULL;
+       25:   10:    return newNode;
+        -:   11:}
+        -:   12:
+       19:   13:void initStack(Stack* stack) {
+       19:   14:    stack->top = NULL;
+       19:   15:}
+        -:   16:
+        1:   17:void destroyStack(Stack* stack) {
+        1:   18:    Node* current = stack->top;
+        3:   19:    while (current != NULL) {
+        2:   20:        Node *tmp = current;
+        2:   21:        current = current->next;
+        2:   22:	    free(tmp);
+        -:   23:    }
+        1:   24:    stack->top=NULL;
+        1:   25:}
+        -:   26:
+       25:   27:void push(Stack* stack, int data) {
+       25:   28:    Node* newNode = createNode(data);
+       25:   29:    newNode->next = stack->top;
+       25:   30:    stack->top = newNode;
+       25:   31:}
+        -:   32:
+        3:   33:void pop(Stack* stack) {
+        3:   34:    if(isEmpty(stack)){return;}
+        -:   35:    Node* temp = stack->top;
+        2:   36:    stack->top = stack->top->next;
+        2:   37:}
+        -:   38:
+        -:   39:Node* searchByValue(Stack* stack, int value) {
+        3:   40:    Node* current = stack->top;
+        3:   41:    while (current != NULL) {
+        6:   42:        if (current->data == value) {
+        4:   43:            return current;
+        1:   44:        }
+        -:   45:        current = current->next;
+        3:   46:    }
+        -:   47:    return NULL;
+        2:   48:}
+        -:   49:
+        -:   50:Node* searchByIndex(Stack* stack, int index) {
+        3:   51:    Node* current = stack->top;
+        3:   52:    int count = 0;
+        3:   53:    while (current != NULL) {
+        5:   54:        if (count == index) {
+        4:   55:            return current;
+        2:   56:        }
+        -:   57:        count++;
+        2:   58:        current = current->next;
+        2:   59:    }
+        -:   60:    return NULL;
+        1:   61:}
+        -:   62:
+        -:   63:Node* getTop(Stack* stack) {
+        2:   64:    return stack->top;
+        2:   65:}
+        -:   66:
+        -:   67:void traverseStack(Stack* stack) {
+        2:   68:    Node* current = stack->top;
+        2:   69:    printf("Stack elements: ");
+        2:   70:    while (current != NULL) {
+        4:   71:        printf("%d ", current->data);
+        2:   72:        current = current->next;
+        2:   73:    }
+        -:   74:    printf("\n");
+        2:   75:}
+        2:   76:
+        -:   77:bool isEmpty(Stack* stack) {
+        5:   78:    return stack->top == NULL;
+        5:   79:}
