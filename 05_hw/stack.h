@@ -33,7 +33,7 @@ const Node* getTop(const Stack* stack);
 
 void traverseStack(Stack* stack);
 
-const bool isEmpty(const Stack* stack);
+bool isEmpty(const Stack* stack);
 
 #ifdef __cplusplus
 }

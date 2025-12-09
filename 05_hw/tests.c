@@ -21,6 +21,8 @@ void TopValueIsCorrectAfterPush(void){
 
     push(&stack, -1);
     CU_ASSERT_EQUAL(stack.top->data, -1);
+
+    destroyStack(&stack);
 }
 
 void TopValueIsCorrectAfterSeveralPush(void){
@@ -32,6 +34,8 @@ void TopValueIsCorrectAfterSeveralPush(void){
     push(&stack, -2);
     
     CU_ASSERT_EQUAL(stack.top->data, -2);
+    destroyStack(&stack);
+
 }
 //pop
 void StackIsNullAfterPopSingleElement(void){
@@ -56,6 +60,9 @@ void TopIsCorrectAfterPop(void){
     CU_ASSERT_EQUAL(stack.top->data, 1);
     CU_ASSERT_PTR_NULL(stack.top->next);
 
+    destroyStack(&stack);
+
+
 }
 
 void TopIsCorrectAfterPopFromNoneElementStack(void){
@@ -79,6 +86,9 @@ void SearchFindsExistingValue(void){
     Node* found = searchByValue(&stack, 2);
     CU_ASSERT_PTR_NOT_NULL(found);
     CU_ASSERT_EQUAL(found->data, 2);
+
+    destroyStack(&stack);
+
 }
 
 void SearchReturnsNullForMissingValue(void){
@@ -90,6 +100,9 @@ void SearchReturnsNullForMissingValue(void){
     
     Node* notFound = searchByValue(&stack, 999);
     CU_ASSERT_PTR_NULL(notFound);
+
+    destroyStack(&stack);
+
 }
 
 void SearchReturnsNullInEmptyStack(void){
@@ -111,6 +124,8 @@ void SearchByIndexFindsTopElement(void){
     Node* top = searchByIndex(&stack, 0);
     CU_ASSERT_PTR_NOT_NULL(top);
     CU_ASSERT_EQUAL(top->data, 2);
+
+    destroyStack(&stack);
 }
 
 void SearchByIndexFindsSecondElement(void){
@@ -123,6 +138,7 @@ void SearchByIndexFindsSecondElement(void){
     Node* second = searchByIndex(&stack, 1);
     CU_ASSERT_PTR_NOT_NULL(second);
     CU_ASSERT_EQUAL(second->data, 1);
+    destroyStack(&stack);
 }
 
 void SearchByIndexReturnsNullForInvalidIndex(void){
@@ -133,6 +149,7 @@ void SearchByIndexReturnsNullForInvalidIndex(void){
     
     Node* result = searchByIndex(&stack, 5);
     CU_ASSERT_PTR_NULL(result);
+    destroyStack(&stack);
 }
 
 // getTop
@@ -153,6 +170,7 @@ void GetTopReturnsCorrectElement(void){
     const Node* top = getTop(&stack);
     CU_ASSERT_PTR_NOT_NULL(top);
     CU_ASSERT_EQUAL(top->data, 1);
+    destroyStack(&stack);
 }
 
 // traverseStack 
@@ -171,6 +189,7 @@ void TraverseDoesNotCrashOnNonEmptyStack(void){
     push(&stack, 2);
     
     traverseStack(&stack); 
+    destroyStack(&stack);
 }
 
 // isEmpty
@@ -190,6 +209,7 @@ void IsEmptyReturnsFalseForNonEmptyStack(void){
     
     bool empty = isEmpty(&stack);
     CU_ASSERT_FALSE(empty);
+    destroyStack(&stack);
 }
 
 // destroyStack
@@ -202,6 +222,7 @@ void DestroyStackMakesTopNull(void){
     
     destroyStack(&stack);
     CU_ASSERT_EQUAL(stack.top, NULL);
+    destroyStack(&stack);
 }
 
 
