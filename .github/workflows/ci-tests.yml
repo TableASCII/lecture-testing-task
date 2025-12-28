@@ -1,0 +1,27 @@
+name: C Unit Tests CI
+
+on:
+  push:
+    branches: [ "fix_stack" ]
+  pull_request:
+    branches: [ "fix_stack" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcunit-dev build-essential
+
+    - name: Compile
+      run: |
+        gcc -o tests 05_hw/*.c -lcunit
+
+    - name: Run Tests
+      run: ./tests
